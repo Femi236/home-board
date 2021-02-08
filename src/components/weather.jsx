@@ -6,11 +6,11 @@ const apiKey = "3941cfc3250bbe2b20e17ec6f640bf60";
 class Weather extends Component {
   constructor() {
     super();
-    this.getWeather();
+    this.state = { temp: 0.0, icon: "04d" };
   }
-  state = { temp: 0.0, icon: "" };
 
   componentDidMount() {
+    this.getWeather();
     this.weatherID = setInterval(() => this.getWeather(), 60000);
   }
 
@@ -26,6 +26,15 @@ class Weather extends Component {
     });
   };
 
+  sayWeather = () => {
+    const synth = window.speechSynthesis;
+    const utter = new SpeechSynthesisUtterance();
+    utter.voice = synth.getVoices()[3];
+    utter.text = `The weather is ${this.state.temp} degrees`;
+    synth.speak(utter);
+    console.log("Hit weather");
+  };
+
   //   updateWeather = () => {
   //     const response = this.getWeather();
   //     this.setState({ temp: response.main.temp });
@@ -38,6 +47,7 @@ class Weather extends Component {
           {this.state.temp}°C
           <img
             src={`http://openweathermap.org/img/wn/${this.state.icon}@2x.png`}
+            alt=""
           ></img>
         </div>
       </React.Fragment>

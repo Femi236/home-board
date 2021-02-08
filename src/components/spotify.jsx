@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import SpotifyWebApi from "spotify-web-api-js";
-import spotifyWebApi from "spotify-web-api-js";
 import "./components.css";
 
 const spotifyApi = new SpotifyWebApi();
@@ -52,7 +51,6 @@ class Spotify extends Component {
     spotifyApi
       .getMyCurrentPlaybackState()
       .then((response) => {
-        const testResponse = response.item.name;
         this.setState({
           nowPlaying: {
             name: response.item.name,
@@ -124,6 +122,7 @@ class Spotify extends Component {
               <img
                 src={this.state.nowPlaying.albumArt}
                 style={{ height: 300 }}
+                alt=""
               />
             </div>
             <div className="slideContainer">
@@ -131,6 +130,7 @@ class Spotify extends Component {
                 type="range"
                 max={this.state.nowPlaying.duration}
                 value={this.state.nowPlaying.currentPosition}
+                readOnly={true}
                 className="slider"
                 id="myRange"
               ></input>

@@ -37,34 +37,34 @@ class App extends Component {
     }
     return (
       <React.Fragment>
-        <div class="row container-fluid pt-3">
-          <div class="col-3 h1 align-left">
+        <div className="row container-fluid pt-3">
+          <div className="col-3 h1 align-left">
             <Clock type={1} />
             <ImageSlideshow />
           </div>
 
-          <div class="col-6"></div>
-          <div class="col-3 h1 text-left">
+          <div className="col-6"></div>
+          <div className="col-3 h1 text-left">
             <Clock type={2} />
             <Clock type={3} />
           </div>
 
-          <div class="w-100 d-none d-md-block">
+          <div className="w-100 d-none d-md-block">
             <Spotify />
           </div>
-          <div class="w-100 d-none d-md-block"></div>
-          <div class="w-100 d-none d-md-block"></div>
-          <div class="w-100 d-none d-md-block"></div>
-          <div class="col-3 align-left">
+          <div className="w-100 d-none d-md-block"></div>
+          <div className="w-100 d-none d-md-block"></div>
+          <div className="w-100 d-none d-md-block"></div>
+          <div className="col-3 align-left">
             <Weather />
           </div>
-          <div class="col-3"></div>
-          <div class="col-6">
+          <div className="col-3"></div>
+          <div className="col-6">
             <Quote />
           </div>
         </div>
 
-        {/* <div class="row container-fluid h1"></div> */}
+        {/* <div className="row container-fluid h1"></div> */}
       </React.Fragment>
     );
   }

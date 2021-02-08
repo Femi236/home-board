@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import mycss from "../cover.css";
+// import mycss from "../cover.css";
 
-const imageUrl = "https://picsum.photos/1500/1000";
+const imageUrl = "https://picsum.photos/1920/1279";
 
 // const imageListUrl = "https://picsum.photos/v2/list";
 
@@ -16,10 +16,10 @@ class ImageSlideshow extends Component {
       url: "",
       download_url: "",
     };
-    this.changeImage();
   }
 
   componentDidMount() {
+    this.changeImage();
     setInterval(() => this.changeImage(), 300000);
   }
 
@@ -28,6 +28,8 @@ class ImageSlideshow extends Component {
 
     const response = await apiCall;
 
+    // console.log(response);
+
     // console.log(response.url);
 
     // console.log(imageUrl);
@@ -35,9 +37,8 @@ class ImageSlideshow extends Component {
       "root"
     ).style.backgroundImage = `url(${response.url})`; //`url(${process.env.PUBLIC_URL}/images/bg-img-2.jpg)`;
 
-    document.getElementById("root").style.backgroundSize = "cover";
     document.getElementById("root").style.backgroundRepeat = "no-repeat";
-
+    document.getElementById("root").style.backgroundSize = "cover";
     //"url('https://images.unsplash.com/photo-1518368116838-b82b4bc2dcb0?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1051&q=80')";
 
     // backgroundImage =

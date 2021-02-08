@@ -6,14 +6,14 @@ class Quotes extends Component {
   constructor() {
     super();
     this.state = { quote: "", author: "" };
-    this.getNewQuote();
   }
 
   componentDidMount() {
-    const date = new Date();
-    const time = date.getMinutes();
+    this.getNewQuote();
+    // const date = new Date();
+    // const time = date.getMinutes();
     const timeToNextHour = 3600000 - (new Date().getTime() % 3600000);
-    console.log(timeToNextHour);
+    // console.log(timeToNextHour);
     setTimeout(() => this.getNewQuote(), timeToNextHour);
     setInterval(() => this.getNewQuote(), 3600000);
   }
