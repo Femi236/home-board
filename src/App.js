@@ -1,33 +1,43 @@
 import React, { Component } from "react";
-
+//import "./App.css";
 import "./cover.css";
-import "weather-icons/css/weather-icons.css";
-
 import LoadPage from "./components/loadPage";
 import Clock from "./components/clock";
+import "weather-icons/css/weather-icons.css";
 import Weather from "./components/weather";
 import Spotify from "./components/spotify";
 import ImageSlideshow from "./components/imagelideshow";
 import Quote from "./components/quotes";
+import TextToSpeech from "./components/textToSpeech";
+// import Todo from "./components/todo";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      // Initially set render state to false to allow loadPage component to show
-      render: false,
+      render: false, //Set render state to false
     };
+    this.weatherRef = React.createRef();
+    // this.todoRef = React.createRef();
   }
 
   componentDidMount() {
     setTimeout(
       function () {
-        //Start the timer, After 3 seconds, set render to true
-        this.setState({ render: true });
+        //Start the timer
+        this.setState({ render: true }); //After 3 seconds, set render to true
       }.bind(this),
       3000
     );
   }
+
+  sayWeather = () => {
+    this.weatherRef.current.sayWeather();
+  };
+
+  // sayTasks = () => {
+  //   this.todoRef.current.getAllTasks();
+  // };
 
   render() {
     if (!this.state.render) {
@@ -58,13 +68,21 @@ class App extends Component {
           <div className="w-100 d-none d-md-block"></div>
           <div className="w-100 d-none d-md-block"></div>
           <div className="col-3 align-left">
-            <Weather />
+            <Weather ref={this.weatherRef} />
           </div>
-          <div className="col-3"></div>
+          <div className="col-3">
+            <TextToSpeech
+              sayWeather={this.sayWeather}
+              // sayTasks={this.sayTasks}
+            />
+            {/* <Todo ref={this.todoRef} /> */}
+          </div>
           <div className="col-6">
             <Quote />
           </div>
         </div>
+
+        {/* <div class="row container-fluid h1"></div> */}
       </React.Fragment>
     );
   }
