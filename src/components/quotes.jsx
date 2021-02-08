@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 
+// url to get quotes
 const quotesUrl = "https://type.fit/api/quotes";
 
 class Quotes extends Component {
@@ -8,19 +9,21 @@ class Quotes extends Component {
     this.state = { quote: "", author: "" };
   }
 
+  /**
+   * Get a new quote at the start of every hour
+   */
   componentDidMount() {
     this.getNewQuote();
-    // const date = new Date();
-    // const time = date.getMinutes();
     const timeToNextHour = 3600000 - (new Date().getTime() % 3600000);
-    // console.log(timeToNextHour);
     setTimeout(() => this.getNewQuote(), timeToNextHour);
     setInterval(() => this.getNewQuote(), 3600000);
   }
 
+  /**
+   * Return a random quote from the quotes api
+   */
   getNewQuote = async () => {
     const apiCall = await fetch(`${quotesUrl}`);
-
     const response = await apiCall.json();
     let index = Math.floor(Math.random() * response.length);
     this.setState({

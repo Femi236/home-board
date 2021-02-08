@@ -1,14 +1,20 @@
 import React, { Component } from "react";
-import SpotifyWebApi from "spotify-web-api-js";
+
 import "./components.css";
 
+import SpotifyWebApi from "spotify-web-api-js";
+
+// Use SpotifyWebApi object
 const spotifyApi = new SpotifyWebApi();
+
+// Saved tokens to allow for refreshing
 let outsideToken = "";
 let outsideRefresh = "";
 
 class Spotify extends Component {
   constructor() {
     super();
+    // Get tokens from the url parameters
     let params = this.getHashParams();
     let token = params.access_token;
     let refreshToken = params.refresh_token;
@@ -30,10 +36,13 @@ class Spotify extends Component {
   }
 
   componentDidMount() {
-    // document.getElementById("spotify-link").onclick();
+    // Call from the API every half second
     this.spotifyID = setInterval(() => this.getNowPlaying(), 500);
   }
 
+  /**
+   * Get tokens from url parameters
+   */
   getHashParams() {
     var hashParams = {};
     var e,
@@ -47,6 +56,9 @@ class Spotify extends Component {
     return hashParams;
   }
 
+  /**
+   * Get the song playing using the tokens
+   */
   getNowPlaying() {
     spotifyApi
       .getMyCurrentPlaybackState()
@@ -62,34 +74,26 @@ class Spotify extends Component {
         });
       })
       .catch((e) => {
-        // if (e.response.error.status === 401) {
-        //   console.log("error 401");
-        // }
-
         if (e.status === 401) {
+          // Refresh the token if the access_token is expired
           this.refresh();
-          // console.log("access token");
         }
-        // console.log(e.status);
-        // this.setState({ nowPlaying: { name: "Nothing Playing" } });
       });
   }
 
+  /**
+   * Refresh the access token
+   */
   refresh = async () => {
     const apiCall = await fetch(
       `http://localhost:8888/refresh_token?refresh_token=${outsideRefresh}`
     );
     const data = await apiCall.json();
-
     outsideToken = data.access_token;
     let newRefresh = data.refresh_token;
     if (newRefresh) {
       outsideRefresh = newRefresh;
     }
-    console.log(new Date());
-    console.log(this.getHashParams());
-    console.log(outsideToken);
-    console.log(outsideRefresh);
     spotifyApi.setAccessToken(outsideToken);
     return data;
   };
@@ -102,12 +106,6 @@ class Spotify extends Component {
     return (
       <React.Fragment>
         {!this.state.loggedIn && (
-          // <a id="spotify-link" href="http://localhost:8888/login">
-          //   Login to Spotify
-          // </a>
-          // <form action="http://localhost:8888/login">
-          //   <input id="spotify-link" type="submit" value="Login to Spotify" />
-          // </form>
           <div
             className="UFIInputContainer"
             ref={this.simulateClick}

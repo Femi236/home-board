@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+
 import "weather-icons/css/weather-icons.css";
 
+// Open-Weather api key
 const apiKey = "3941cfc3250bbe2b20e17ec6f640bf60";
 
 class Weather extends Component {
@@ -14,6 +16,9 @@ class Weather extends Component {
     this.weatherID = setInterval(() => this.getWeather(), 60000);
   }
 
+  /**
+   * Get current temperature in the Hague
+   */
   getWeather = async () => {
     const apiCall = await fetch(
       `http://api.openweathermap.org/data/2.5/weather?q=The Hague&appid=${apiKey}`
@@ -26,6 +31,9 @@ class Weather extends Component {
     });
   };
 
+  /**
+   * Make voice assistant say the weather
+   */
   sayWeather = () => {
     const synth = window.speechSynthesis;
     const utter = new SpeechSynthesisUtterance();
@@ -34,11 +42,6 @@ class Weather extends Component {
     synth.speak(utter);
     console.log("Hit weather");
   };
-
-  //   updateWeather = () => {
-  //     const response = this.getWeather();
-  //     this.setState({ temp: response.main.temp });
-  //   };
 
   render() {
     return (

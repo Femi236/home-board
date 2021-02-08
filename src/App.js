@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-//import "./App.css";
+
 import "./cover.css";
+import "weather-icons/css/weather-icons.css";
+
 import LoadPage from "./components/loadPage";
 import Clock from "./components/clock";
-import "weather-icons/css/weather-icons.css";
 import Weather from "./components/weather";
 import Spotify from "./components/spotify";
 import ImageSlideshow from "./components/imagelideshow";
@@ -13,15 +14,16 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      render: false, //Set render state to false
+      // Initially set render state to false to allow loadPage component to show
+      render: false,
     };
   }
 
   componentDidMount() {
     setTimeout(
       function () {
-        //Start the timer
-        this.setState({ render: true }); //After 3 seconds, set render to true
+        //Start the timer, After 3 seconds, set render to true
+        this.setState({ render: true });
       }.bind(this),
       3000
     );
@@ -63,8 +65,6 @@ class App extends Component {
             <Quote />
           </div>
         </div>
-
-        {/* <div className="row container-fluid h1"></div> */}
       </React.Fragment>
     );
   }

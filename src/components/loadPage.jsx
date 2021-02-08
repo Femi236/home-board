@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "../cover.css";
 
+// url to get new image
 const imageUrl = "https://picsum.photos/1500/1000";
 
 class loadPage extends Component {
@@ -21,6 +22,9 @@ class loadPage extends Component {
     );
   }
 
+  /**
+   * Change the background image from the picsum api
+   */
   changeImage = async () => {
     const apiCall = await fetch(`${imageUrl}`);
     const response = await apiCall;
@@ -31,6 +35,9 @@ class loadPage extends Component {
     document.getElementById("root").style.backgroundSize = "cover";
   };
 
+  /**
+   * Make the mainText show in a typewriter effect
+   */
   typeWriter = () => {
     if (this.state.i < this.state.mainText.length) {
       let newText =

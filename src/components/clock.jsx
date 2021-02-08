@@ -29,14 +29,15 @@ class Clock extends Component {
   };
 
   componentDidMount() {
-    this.tmerId = setInterval(() => this.tick(), 1000);
+    this.timerId = setInterval(() => this.tick(), 1000);
   }
 
   componentWillUnmount() {
-    clearInterval(this.tmerId);
+    clearInterval(this.timerId);
   }
 
   returnedTime = (props) => {
+    // Return different parts of the time depending on the type of component called
     if (this.props.type === 1) {
       return this.state.date.toLocaleTimeString();
     } else if (this.props.type === 2) {
