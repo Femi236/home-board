@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
@@ -15,6 +15,16 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <link rel="stylesheet" href="../src/cover.css" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+      crossorigin="anonymous"
+    />
+
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -26,9 +36,9 @@
     -->
     <title>React App</title>
   </head>
-  <body>
+  <body id="root" class="d-flex h-100 text-center text-white mybg">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

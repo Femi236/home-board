@@ -1,0 +1,8 @@
+.slidecontainer {
+  width: 300px; /* Width of the outside container */
+}
+
+/* The slider itself */
+.slider {
+  width: 300px; /* Full-width */
+}
