@@ -18,6 +18,7 @@ const Dictaphone = (props) => {
   // const [message, setMessage] = useState("");
   const [listening, setListening] = useState(false);
   const [img, setImg] = useState("/images/mute.svg");
+  const [speaking, setSpeaking] = useState(false);
 
   const commands1 = [
     {
@@ -117,10 +118,15 @@ const Dictaphone = (props) => {
     myTimeout = setTimeout(myTimer, 10000);
     utter.voice = synth.getVoices()[3];
     utter.text = text;
+    utter.onstart = function () {
+      setSpeaking(true);
+    };
     utter.onend = function () {
       clearTimeout(myTimeout);
+      setSpeaking(false);
     };
     synth.speak(utter);
+    // setSpeaking(false);
   };
 
   const startListening = () => {
@@ -198,6 +204,14 @@ const Dictaphone = (props) => {
     }
   };
 
+  const getSpeakImage = () => {
+    if (speaking) {
+      return process.env.PUBLIC_URL + "/images/voice.gif";
+    } else {
+      return process.env.PUBLIC_URL + "/images/no-voice.png";
+    }
+  };
+
   return (
     <div>
       <img
@@ -210,6 +224,14 @@ const Dictaphone = (props) => {
       <button onClick={() => speak("(NBA)")}>speak</button>
       <button onClick={() => tellJoke()}>Joke</button>
       <p>{transcript}</p>
+      <img
+        // src={() =>
+        //   speaking
+        //     ? process.env.PUBLIC_URL + "/images/voice.gif"
+        //     : process.env.PUBLIC_URL + "/images/no-voice.png"
+        // }
+        src={getSpeakImage()}
+      ></img>
       {/* <p>{finalTranscript}</p> */}
     </div>
   );

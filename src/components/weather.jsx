@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import "weather-icons/css/weather-icons.css";
 
 // Open-Weather api key
-const apiKey = "3941cfc3250bbe2b20e17ec6f640bf60";
+const apiKey = api - key;
 
 class Weather extends Component {
   constructor() {

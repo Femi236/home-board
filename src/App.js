@@ -9,7 +9,7 @@ import Spotify from "./components/spotify";
 import ImageSlideshow from "./components/imagelideshow";
 import Quote from "./components/quotes";
 import TextToSpeech from "./components/textToSpeech";
-// import Todo from "./components/todo";
+import Todo from "./components/todo";
 
 class App extends Component {
   constructor() {
@@ -18,7 +18,7 @@ class App extends Component {
       render: false, //Set render state to false
     };
     this.weatherRef = React.createRef();
-    // this.todoRef = React.createRef();
+    this.todoRef = React.createRef();
   }
 
   componentDidMount() {
@@ -35,9 +35,9 @@ class App extends Component {
     this.weatherRef.current.sayWeather();
   };
 
-  // sayTasks = () => {
-  //   this.todoRef.current.getAllTasks();
-  // };
+  sayTasks = () => {
+    this.todoRef.current.getAllTasks();
+  };
 
   render() {
     if (!this.state.render) {
@@ -73,9 +73,9 @@ class App extends Component {
           <div className="col-3">
             <TextToSpeech
               sayWeather={this.sayWeather}
-              // sayTasks={this.sayTasks}
+              sayTasks={this.sayTasks}
             />
-            {/* <Todo ref={this.todoRef} /> */}
+            <Todo ref={this.todoRef} />
           </div>
           <div className="col-6">
             <Quote />

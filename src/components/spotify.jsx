@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+// import { Redirect } from "react-router-dom";
 
 import "./components.css";
 
@@ -16,14 +17,15 @@ class Spotify extends Component {
     super();
     // Get tokens from the url parameters
     let params = this.getHashParams();
-    let token = params.access_token;
-    let refreshToken = params.refresh_token;
+    let token = params.access_token_spotify;
+    let refreshToken = params.refresh_token_spotify;
     outsideToken = token;
     outsideRefresh = refreshToken;
     if (token) {
       spotifyApi.setAccessToken(token);
     }
     this.state = {
+      // redirect: null,
       loggedIn: token ? true : false,
       nowPlaying: {
         name: "Checking...",
@@ -98,11 +100,18 @@ class Spotify extends Component {
     return data;
   };
 
-  simulateClick(e) {
+  simulateClick = (e) => {
+    // this.setState({ redirect: "http://localhost:3000/" });
     e.click();
-  }
+  };
 
   render() {
+    // if (this.state.redirect) {
+    //   {
+    //     this.setState({ redirect: null });
+    //   }
+    //   return <Redirect to={this.state.redirect} />;
+    // }
     return (
       <React.Fragment>
         {!this.state.loggedIn && (
