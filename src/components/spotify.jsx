@@ -25,7 +25,6 @@ class Spotify extends Component {
       spotifyApi.setAccessToken(token);
     }
     this.state = {
-      // redirect: null,
       loggedIn: token ? true : false,
       nowPlaying: {
         name: "Checking...",
@@ -101,17 +100,10 @@ class Spotify extends Component {
   };
 
   simulateClick = (e) => {
-    // this.setState({ redirect: "http://localhost:3000/" });
     e.click();
   };
 
   render() {
-    // if (this.state.redirect) {
-    //   {
-    //     this.setState({ redirect: null });
-    //   }
-    //   return <Redirect to={this.state.redirect} />;
-    // }
     return (
       <React.Fragment>
         {!this.state.loggedIn && (

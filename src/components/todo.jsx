@@ -4,6 +4,7 @@ import axios from "axios";
 import { AzureAD } from "react-aad-msal";
 import { authProvider } from "../authProvider";
 
+// The ID of my pi-app list in todo
 const taskListID =
   "AQMkADAwATMwMAItMjIAM2ItOGJkYi0wMAItMDAKAC4AAAPsE0bgVciJS53tz5qGuCfJAQD4bxjVsPprRZ7XeMcIESaWAAFORSDGAAAA/";
 const baseURL = "https://graph.microsoft.com/v1.0/me/todo/lists/";
@@ -14,35 +15,32 @@ class App extends Component {
     this.state = { tasks: [] };
   }
 
+  /**
+   * Get tasks from graph API
+   */
   getAllTasks = async () => {
     const token = await authProvider.getAccessToken();
-    // console.log(token.accessToken);
-
     axios
       .get(baseURL + taskListID + "tasks/", {
         headers: {
           Authorization: "Bearer " + token.accessToken,
-          // "Content-Type": "application/json",
         },
       })
       .then((res) => {
         let tasks = res.data.value;
-        console.log(typeof tasks);
-        // console.log(tasks);
         this.setState({ tasks });
-        console.log(this.state.tasks[0]);
-        for (let i = 0; i < this.state.tasks.length; i++) {
-          console.log(this.state.tasks[i].title);
-        }
         this.sayTasks();
       });
   };
 
+  /**
+   * Make Voice Assistant read out tasks
+   */
   sayTasks = () => {
     const synth = window.speechSynthesis;
     const utter = new SpeechSynthesisUtterance();
     utter.voice = synth.getVoices()[3];
-    utter.text = `Your tasks for today are`; // ${this.state.temp} degrees`;
+    utter.text = `Your tasks for today are`;
     let i = 0;
     for (i = 0; i < this.state.tasks.length - 1; i++) {
       utter.text += this.state.tasks[i].title + ", ";
@@ -54,9 +52,7 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        {/* <h1>Hi</h1>
-        {/* <span>{this.state.tasks}</span> */}
-        <button onClick={this.getAllTasks}>Click me</button>
+        <button onClick={this.getAllTasks}>Get Tasks</button>
       </React.Fragment>
     );
   }

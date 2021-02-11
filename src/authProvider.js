@@ -5,7 +5,7 @@ import { MsalAuthProvider, LoginType } from "react-aad-msal";
 const config = {
   auth: {
     authority: "https://login.microsoftonline.com/common",
-    clientId: client - ID,
+    clientId: clientId,
     redirectUri: "http://localhost:3000",
   },
   cache: {

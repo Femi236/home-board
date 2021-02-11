@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-//import "./App.css";
 import "./cover.css";
 import LoadPage from "./components/loadPage";
 import Clock from "./components/clock";
@@ -8,7 +7,7 @@ import Weather from "./components/weather";
 import Spotify from "./components/spotify";
 import ImageSlideshow from "./components/imagelideshow";
 import Quote from "./components/quotes";
-import TextToSpeech from "./components/textToSpeech";
+import VoiceAssistant from "./components/VoiceAssistant";
 import Todo from "./components/todo";
 
 class App extends Component {
@@ -17,6 +16,8 @@ class App extends Component {
     this.state = {
       render: false, //Set render state to false
     };
+
+    // Create references to different components that we need to access their methods
     this.weatherRef = React.createRef();
     this.todoRef = React.createRef();
   }
@@ -31,11 +32,19 @@ class App extends Component {
     );
   }
 
+  /**
+   * Make voice assistant say the weather
+   */
   sayWeather = () => {
+    // Call say weather method in the Weather component
     this.weatherRef.current.sayWeather();
   };
 
+  /**
+   * Make voice assistant say the tasks
+   */
   sayTasks = () => {
+    // Call say tasks method in the Todo component
     this.todoRef.current.getAllTasks();
   };
 
@@ -71,7 +80,7 @@ class App extends Component {
             <Weather ref={this.weatherRef} />
           </div>
           <div className="col-3">
-            <TextToSpeech
+            <VoiceAssistant
               sayWeather={this.sayWeather}
               sayTasks={this.sayTasks}
             />

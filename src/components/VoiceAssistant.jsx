@@ -5,17 +5,13 @@ import SpeechRecognition, {
 
 import axios from "axios";
 
+// JokeAPI consts
 const jokeBaseURL = "https://v2.jokeapi.dev";
 const jokeCategories = ["Programming", "Misc", "Pun", "Spooky", "Christmas"];
 const jokeParams = ["blacklistFlags=nsfw,religious,racist", "amount=1"];
 
-// import SpeechRecognition2, {
-//   useSpeechRecognition2,
-// } from "react-speech-recognition";
-
-const Dictaphone = (props) => {
+const VoiceAssistant = (props) => {
   let synth = window.speechSynthesis;
-  // const [message, setMessage] = useState("");
   const [listening, setListening] = useState(false);
   const [img, setImg] = useState("/images/mute.svg");
   const [speaking, setSpeaking] = useState(false);
@@ -26,7 +22,6 @@ const Dictaphone = (props) => {
       callback: (command) => {
         console.log("Command:");
         console.log(command);
-        // setMessage(`Hi there! You said: "${command}"`);
         if (command === undefined) {
           speak("What can I help you with?");
         } else if (command === "shut up") {
@@ -44,8 +39,6 @@ const Dictaphone = (props) => {
         } else if (command.includes("who is")) {
           let search = command.replace("who is", "");
           wikiSearch(search);
-          // console.log(response);
-          // speak(response);
         } else if (
           command.includes("why is") &&
           command.includes("so annoying")
@@ -64,17 +57,12 @@ const Dictaphone = (props) => {
         resetTranscript();
       },
       matchInterim: false,
-      // isFuzzyMatch: true,
-      // fuzzyMatchinThreshold: 0.8,
     },
     {
       command: "Hey Google",
       callback: () => {
-        // SpeechRecognition.startListening();
         speak("What can I help you with?");
         setCommands(commands2);
-        // useSpeechRecognition({ commands });
-        // SpeechRecognition2.startListening();
       },
     },
   ];
@@ -85,22 +73,15 @@ const Dictaphone = (props) => {
     {
       command: "How are you",
       callback: (command) => {
-        // SpeechRecognition2.stopListening();
         console.log(command);
         speak("I'm all good");
         setCommands(commands1);
-        // SpeechRecognition.startListening();
       },
       matchInterim: false,
     },
   ];
 
-  // let commands = commands1;
-  // setCommands(commands1);
-
   const { transcript, resetTranscript } = useSpeechRecognition({ commands });
-  // const { transcript2, resetTranscript2 } = useSpeechRecognition({ commands2 });
-  // useSpeechRecognition(secondaryCommands).transcript
 
   if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
     return null;
@@ -126,7 +107,6 @@ const Dictaphone = (props) => {
       setSpeaking(false);
     };
     synth.speak(utter);
-    // setSpeaking(false);
   };
 
   const startListening = () => {
@@ -149,7 +129,6 @@ const Dictaphone = (props) => {
         )}`
       )
       .then((res) => {
-        // console.log(res.data);
         const response = res.data;
         if (response.type === "twopart") {
           const setup = response.setup;
@@ -224,16 +203,8 @@ const Dictaphone = (props) => {
       <button onClick={() => speak("(NBA)")}>speak</button>
       <button onClick={() => tellJoke()}>Joke</button>
       <p>{transcript}</p>
-      <img
-        // src={() =>
-        //   speaking
-        //     ? process.env.PUBLIC_URL + "/images/voice.gif"
-        //     : process.env.PUBLIC_URL + "/images/no-voice.png"
-        // }
-        src={getSpeakImage()}
-      ></img>
-      {/* <p>{finalTranscript}</p> */}
+      <img src={getSpeakImage()}></img>
     </div>
   );
 };
-export default Dictaphone;
+export default VoiceAssistant;
