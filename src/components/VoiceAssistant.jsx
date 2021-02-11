@@ -3,19 +3,23 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 
-import axios from "axios";
-
-// JokeAPI consts
-const jokeBaseURL = "https://v2.jokeapi.dev";
-const jokeCategories = ["Programming", "Misc", "Pun", "Spooky", "Christmas"];
-const jokeParams = ["blacklistFlags=nsfw,religious,racist", "amount=1"];
+// Helper Functions
+import { wikiSearch } from "./voiceAssistantHelpers/wikiSearch";
+import { tellJoke } from "./voiceAssistantHelpers/tellJoke";
 
 const VoiceAssistant = (props) => {
+  // Text to speech
   let synth = window.speechSynthesis;
+  // States
   const [listening, setListening] = useState(false);
   const [img, setImg] = useState("/images/mute.svg");
   const [speaking, setSpeaking] = useState(false);
 
+  //////////////////////////////////////////////////////COMMANDS//////////////////////////////////////////////////////////
+
+  /**
+   * Commands instantiated by "Hey Google"
+   */
   const commands1 = [
     {
       command: "Hey Google *", //["Hello", "Hi"],
@@ -32,13 +36,13 @@ const VoiceAssistant = (props) => {
           stopListening();
           speak("Aight, I didn't wanna hear your raspy voice anyways");
         } else if (command === "tell me a joke") {
-          tellJoke();
+          thisTellJoke();
         } else if (command === "what time is it") {
           let time = new Date();
           speak(`it is ${time.toLocaleTimeString()}`);
         } else if (command.includes("who is")) {
           let search = command.replace("who is", "");
-          wikiSearch(search);
+          thisWikiSearch(search);
         } else if (
           command.includes("why is") &&
           command.includes("so annoying")
@@ -49,7 +53,9 @@ const VoiceAssistant = (props) => {
         } else if (command.includes("weather")) {
           props.sayWeather();
         } else if (command.includes("task") || command.includes("tasks")) {
+          setSpeaking(true);
           props.sayTasks();
+          setTimeout(setSpeaking(false), 10000);
         } else {
           speak("I didn't quite get that");
         }
@@ -69,6 +75,9 @@ const VoiceAssistant = (props) => {
 
   const [commands, setCommands] = useState(commands1);
 
+  /**
+   * Commands started after a pause is heard after "Hey Google is said"
+   */
   const commands2 = [
     {
       command: "How are you",
@@ -83,10 +92,19 @@ const VoiceAssistant = (props) => {
 
   const { transcript, resetTranscript } = useSpeechRecognition({ commands });
 
+  /**
+   * Check if browser supports speech recognition
+   */
   if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
+    console.log("Browser does not support speech recognition");
     return null;
   }
 
+  //////////////////////////////////////////////////////SPEAKING//////////////////////////////////////////////////////////
+
+  /**
+   * Quickly stop and restart the speech synthesis because ti times out after around 10 seconds
+   */
   var myTimeout;
   function myTimer() {
     window.speechSynthesis.pause();
@@ -94,8 +112,13 @@ const VoiceAssistant = (props) => {
     myTimeout = setTimeout(myTimer, 10000);
   }
 
+  /**
+   * Make the speech synthesis say text while animating the speech gif
+   * @param text the text to say
+   */
   const speak = (text) => {
     let utter = new SpeechSynthesisUtterance();
+    // Using the timeout function so it doesn't suddenly stop
     myTimeout = setTimeout(myTimer, 10000);
     utter.voice = synth.getVoices()[3];
     utter.text = text;
@@ -109,80 +132,9 @@ const VoiceAssistant = (props) => {
     synth.speak(utter);
   };
 
-  const startListening = () => {
-    setListening(true);
-    setImg("/images/unmute.svg");
-    SpeechRecognition.startListening({ continuous: true });
-  };
-
-  const stopListening = () => {
-    setListening(false);
-    setImg("/images/mute.svg");
-    SpeechRecognition.stopListening();
-  };
-
-  const tellJoke = () => {
-    axios
-      .get(
-        `${jokeBaseURL}/joke/${jokeCategories.join(",")}?${jokeParams.join(
-          "&"
-        )}`
-      )
-      .then((res) => {
-        const response = res.data;
-        if (response.type === "twopart") {
-          const setup = response.setup;
-          const delivery = response.delivery;
-          console.log(setup);
-          console.log(delivery);
-          speak(setup);
-          speak(delivery);
-        } else {
-          const joke = response.joke;
-          console.log(joke);
-          speak(joke);
-        }
-      });
-  };
-
-  const wikiSearch = (search) => {
-    axios
-      .get(
-        `https://en.wikipedia.org/w/api.php?action=opensearch&search=${search}&limit=1&namespace=0&format=json` +
-          "&origin=*"
-      )
-      .then((res) => {
-        const response = res.data;
-        const pageName = response[1][0];
-        // console.log(pageName);
-
-        console.log("pn");
-        console.log(pageName);
-        axios
-          .get(
-            `https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=extracts&exintro&titles=${pageName}&format=json&exsentences=1&explaintext`
-          )
-          .then((res) => {
-            const response = res.data;
-            console.log(response);
-
-            const pageId = Object.keys(response.query.pages)[0];
-            console.log(pageId);
-            const result = response.query.pages[pageId].extract;
-            console.log(result);
-            // return res;
-            speak(result);
-          });
-      });
-  };
-
-  document.onkeydown = function (evt) {
-    evt = evt || window.event;
-    if (evt.code === "KeyM") {
-      listening ? stopListening() : startListening();
-    }
-  };
-
+  /**
+   * Change the speech image to show when the VA is speaking
+   */
   const getSpeakImage = () => {
     if (speaking) {
       return process.env.PUBLIC_URL + "/images/voice.gif";
@@ -190,6 +142,53 @@ const VoiceAssistant = (props) => {
       return process.env.PUBLIC_URL + "/images/no-voice.png";
     }
   };
+
+  //////////////////////////////////////////////////////LISTENING//////////////////////////////////////////////////////////
+
+  /**
+   * Turn on microphone
+   */
+  const startListening = () => {
+    setListening(true);
+    setImg("/images/unmute.svg");
+    SpeechRecognition.startListening({ continuous: true });
+  };
+
+  /**
+   * Turn off microphone
+   */
+  const stopListening = () => {
+    setListening(false);
+    setImg("/images/mute.svg");
+    SpeechRecognition.stopListening();
+  };
+
+  /**
+   * Allow mute and unmute when the "M" key is pressed
+   * @param evt The key event
+   */
+  document.onkeydown = function (evt) {
+    evt = evt || window.event;
+    if (evt.code === "KeyM") {
+      listening ? stopListening() : startListening();
+    }
+  };
+
+  //////////////////////////////////////////////////////FUNCTIONS//////////////////////////////////////////////////////////
+
+  const thisWikiSearch = async (search) => {
+    const ws = await wikiSearch(search);
+    speak(ws);
+  };
+
+  const thisTellJoke = async () => {
+    const tj = await tellJoke();
+    for (let i = 0; i < tj.length; i++) {
+      speak(tj[i]);
+    }
+  };
+
+  //////////////////////////////////////////////////////RENDER//////////////////////////////////////////////////////////
 
   return (
     <div>
@@ -200,10 +199,10 @@ const VoiceAssistant = (props) => {
         style={{ height: 80 }}
       ></img>
       <button onClick={() => wikiSearch("michael jordan")}>search</button>
-      <button onClick={() => speak("(NBA)")}>speak</button>
-      <button onClick={() => tellJoke()}>Joke</button>
+      <button onClick={() => thisWikiSearch("Michael Jordan")}>speak</button>
+      <button onClick={() => thisTellJoke()}>Joke</button>
       <p>{transcript}</p>
-      <img src={getSpeakImage()}></img>
+      <img src={getSpeakImage()} alt=""></img>
     </div>
   );
 };

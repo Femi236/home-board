@@ -7,7 +7,7 @@ import Weather from "./components/weather";
 import Spotify from "./components/spotify";
 import ImageSlideshow from "./components/imagelideshow";
 import Quote from "./components/quotes";
-import VoiceAssistant from "./components/VoiceAssistant";
+import VoiceAssistant from "./components/voiceAssistant";
 import Todo from "./components/todo";
 
 class App extends Component {

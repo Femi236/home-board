@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-import { AzureAD } from "react-aad-msal";
 import { authProvider } from "../authProvider";
 
 // The ID of my pi-app list in todo
@@ -29,6 +28,7 @@ class App extends Component {
       .then((res) => {
         let tasks = res.data.value;
         this.setState({ tasks });
+        console.log(tasks);
         this.sayTasks();
       });
   };
