@@ -5,7 +5,7 @@ import { authProvider } from "../authProvider";
 
 // The ID of my pi-app list in todo
 const taskListID =
-  "AQMkADAwATMwMAItMjIAM2ItOGJkYi0wMAItMDAKAC4AAAPsE0bgVciJS53tz5qGuCfJAQD4bxjVsPprRZ7XeMcIESaWAAFORSDGAAAA/";
+  "AQMkADAwATMwMAItMjIAM2ItOGJkYi0wMAItMDAKAC4AAAPsE0bgVciJS53tz5qGuCfJAQD4bxjVsPprRZ7XeMcIESaWAAFORSDGAAAA";
 const baseURL = "https://graph.microsoft.com/v1.0/me/todo/lists/";
 
 class App extends Component {
@@ -20,16 +20,21 @@ class App extends Component {
   getAllTasks = async () => {
     const token = await authProvider.getAccessToken();
     axios
-      .get(baseURL + taskListID + "tasks/", {
+      .get(baseURL + taskListID + "/tasks", {
         headers: {
           Authorization: "Bearer " + token.accessToken,
         },
       })
       .then((res) => {
+        console.log(res);
         let tasks = res.data.value;
-        this.setState({ tasks });
-        console.log(tasks);
-        this.sayTasks();
+        // let filteredTasks = tasks.filter((x) => x.status !== "completed");
+        this.setState({ tasks: tasks });
+
+        // this.sayTasks();
+        for (let i = 0; i < this.state.tasks.length; i++) {
+          console.log(this.state.tasks[i].title);
+        }
       });
   };
 

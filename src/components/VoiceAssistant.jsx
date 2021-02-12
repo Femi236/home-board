@@ -196,13 +196,13 @@ const VoiceAssistant = (props) => {
         onClick={() => (listening ? stopListening() : startListening())}
         src={process.env.PUBLIC_URL + img}
         alt=""
-        style={{ height: 80 }}
+        style={{ height: 40 }}
       ></img>
-      <button onClick={() => wikiSearch("michael jordan")}>search</button>
-      <button onClick={() => thisWikiSearch("Michael Jordan")}>speak</button>
-      <button onClick={() => thisTellJoke()}>Joke</button>
-      <p>{transcript}</p>
-      <img src={getSpeakImage()} alt=""></img>
+      {/* <button onClick={() => wikiSearch("michael jordan")}>search</button>
+      <button onClick={() => thisWikiSearch("Michael Jordan")}>speak</button> */}
+      {/* <button onClick={() => thisTellJoke()}>Joke</button> */}
+      {/* <p>{transcript}</p> */}
+      <img src={getSpeakImage()} alt="" style={{ height: 140 }}></img>
     </div>
   );
 };

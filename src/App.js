@@ -14,7 +14,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      render: false, //Set render state to false
+      render: true, //Set render state to false
     };
 
     // Create references to different components that we need to access their methods
@@ -59,34 +59,41 @@ class App extends Component {
     return (
       <React.Fragment>
         <div className="row container-fluid pt-3">
-          <div className="col-3 h1 align-left">
-            <Clock type={1} />
+          <div className="col-4 h2 align-left text-left pl-5">
+            <Clock type={2} />
+            <div className="largerh1">
+              <Clock type={1} />
+            </div>
+
             <ImageSlideshow />
           </div>
 
-          <div className="col-6"></div>
-          <div className="col-3 h1 text-left">
-            <Clock type={2} />
-            <Clock type={3} />
+          <div className="col-5"></div>
+          <div className="col-3 h2 text-right pr-5">
+            <div className="largerh1">
+              <Weather type={1} ref={this.weatherRef} />
+            </div>
+            <Weather type={2} />
           </div>
 
           <div className="w-100 d-none d-md-block">
-            <Spotify />
+            <div className="uplift">
+              <Spotify />
+            </div>
           </div>
           <div className="w-100 d-none d-md-block"></div>
           <div className="w-100 d-none d-md-block"></div>
           <div className="w-100 d-none d-md-block"></div>
-          <div className="col-3 align-left">
-            <Weather ref={this.weatherRef} />
-          </div>
+          <div className="col-3 align-left"></div>
           <div className="col-3">
+            <Todo ref={this.todoRef} />
+          </div>
+          <div className="col-2"></div>
+          <div className="col-4">
             <VoiceAssistant
               sayWeather={this.sayWeather}
               sayTasks={this.sayTasks}
             />
-            <Todo ref={this.todoRef} />
-          </div>
-          <div className="col-6">
             <Quote />
           </div>
         </div>
