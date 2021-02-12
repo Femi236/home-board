@@ -24,6 +24,7 @@ const VoiceAssistant = (props) => {
     {
       command: "Hey Google *", //["Hello", "Hi"],
       callback: (command) => {
+        command = command.toLowerCase();
         console.log("Command:");
         console.log(command);
         if (command === undefined) {

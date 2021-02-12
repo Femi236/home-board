@@ -6,3 +6,19 @@
 .slider {
   width: 300px; /* Full-width */
 }
+
+.rectangle {
+  /* height: 40px;
+  border-left-width: 20px;
+  border-left-color: rgb(155, 165, 19); */
+
+  /* font-size: 1.5em; */
+  /* padding: 20px; */
+  border-left-width: 9px;
+  border-left-style: solid;
+  border-left-color: rgb(255, 255, 255);
+}
+
+hr {
+  width: 75%;
+}

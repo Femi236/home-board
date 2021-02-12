@@ -45,7 +45,7 @@ class App extends Component {
    */
   sayTasks = () => {
     // Call say tasks method in the Todo component
-    this.todoRef.current.getAllTasks();
+    this.todoRef.current.sayTasks();
   };
 
   render() {
@@ -84,10 +84,20 @@ class App extends Component {
           <div className="w-100 d-none d-md-block"></div>
           <div className="w-100 d-none d-md-block"></div>
           <div className="w-100 d-none d-md-block"></div>
-          <div className="col-3 align-left"></div>
-          <div className="col-3">
+          <div className="w-100 d-none d-md-block"></div>
+          <div className="w-100 d-none d-md-block"></div>
+          <div className="w-100 d-none d-md-block">
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+          </div>
+          <div className="col-3 align-left pl-5">
             <Todo ref={this.todoRef} />
           </div>
+          <div className="col-3"></div>
           <div className="col-2"></div>
           <div className="col-4">
             <VoiceAssistant

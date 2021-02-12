@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 
+import "./components.css";
+
 import { authProvider } from "../authProvider";
 
 // The ID of my pi-app list in todo
@@ -12,6 +14,11 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = { tasks: [] };
+  }
+
+  componentDidMount() {
+    this.getAllTasks();
+    this.tasksID = setInterval(() => this.getAllTasks(), 300000);
   }
 
   /**
@@ -29,9 +36,8 @@ class App extends Component {
         console.log(res);
         let tasks = res.data.value;
         // let filteredTasks = tasks.filter((x) => x.status !== "completed");
-        this.setState({ tasks: tasks });
+        this.setState({ tasks: tasks.filter((x) => x.status !== "completed") });
 
-        // this.sayTasks();
         for (let i = 0; i < this.state.tasks.length; i++) {
           console.log(this.state.tasks[i].title);
         }
@@ -57,7 +63,13 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        <button onClick={this.getAllTasks}>Get Tasks</button>
+        <h1 className="text-left">To Do</h1>
+        <hr></hr>
+        <div>
+          {this.state.tasks.slice(0, 5).map((task) => (
+            <p className="rectangle text-left pl-3">{task.title}</p>
+          ))}
+        </div>
       </React.Fragment>
     );
   }

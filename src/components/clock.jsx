@@ -41,7 +41,9 @@ class Clock extends Component {
     if (this.props.type === 1) {
       return (
         <React.Fragment>
-          {this.state.date.getHours().toLocaleString() +
+          {(this.state.date.getHours().toLocaleString() < 10
+            ? "0" + this.state.date.getHours().toLocaleString()
+            : this.state.date.getHours().toLocaleString()) +
             ":" +
             (this.state.date.getMinutes() < 10
               ? "0" + this.state.date.getMinutes().toLocaleString()
