@@ -14,6 +14,7 @@ const VoiceAssistant = (props) => {
   const [listening, setListening] = useState(false);
   const [img, setImg] = useState("/images/mute.svg");
   const [speaking, setSpeaking] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   //////////////////////////////////////////////////////COMMANDS//////////////////////////////////////////////////////////
 
@@ -118,12 +119,14 @@ const VoiceAssistant = (props) => {
    * @param text the text to say
    */
   const speak = (text) => {
+    setLoading(true);
     let utter = new SpeechSynthesisUtterance();
     // Using the timeout function so it doesn't suddenly stop
     myTimeout = setTimeout(myTimer, 10000);
     utter.voice = synth.getVoices()[3];
     utter.text = text;
     utter.onstart = function () {
+      setLoading(false);
       setSpeaking(true);
     };
     utter.onend = function () {
@@ -137,7 +140,9 @@ const VoiceAssistant = (props) => {
    * Change the speech image to show when the VA is speaking
    */
   const getSpeakImage = () => {
-    if (speaking) {
+    if (loading) {
+      return process.env.PUBLIC_URL + "/images/voice-loading.gif";
+    } else if (speaking) {
       return process.env.PUBLIC_URL + "/images/voice.gif";
     } else {
       return process.env.PUBLIC_URL + "/images/no-voice.png";
