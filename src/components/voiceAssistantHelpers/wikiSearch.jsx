@@ -29,9 +29,13 @@ export const wikiSearch = async function (search) {
 
               const pageId = Object.keys(response.query.pages)[0];
               console.log(pageId);
+              console.log("here");
               const result = response.query.pages[pageId].extract;
               console.log(result);
-              return result;
+              if (result) {
+                return result;
+              }
+              return `Sorry, I couldn't find anything on ${search}`;
             })
         );
       })

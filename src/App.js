@@ -10,11 +10,16 @@ import Quote from "./components/quotes";
 import VoiceAssistant from "./components/voiceAssistant";
 import Todo from "./components/todo";
 
+var myTimeout;
+let synth = window.speechSynthesis;
+
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      render: true, //Set render state to false
+      render: true,
+      speaking: false,
+      loading: false, //Set render state to false
     };
 
     // Create references to different components that we need to access their methods
@@ -48,6 +53,53 @@ class App extends Component {
     this.todoRef.current.sayTasks();
   };
 
+  //////////////////////////////////////////////////////SPEAKING//////////////////////////////////////////////////////////
+
+  /**
+   * Quickly stop and restart the speech synthesis because ti times out after around 10 seconds
+   */
+
+  myTimer = () => {
+    window.speechSynthesis.pause();
+    window.speechSynthesis.resume();
+    myTimeout = setTimeout(this.myTimer, 10000);
+  };
+
+  /**
+   * Make the speech synthesis say text while animating the speech gif
+   * @param text the text to say
+   */
+  speak = (text) => {
+    this.setState({ loading: true });
+    let utter = new SpeechSynthesisUtterance();
+    // Using the timeout function so it doesn't suddenly stop
+    myTimeout = setTimeout(this.myTimer, 10000);
+    utter.voice = synth.getVoices()[3];
+    utter.text = text;
+    utter.onstart = () => {
+      this.setState({ loading: false });
+      this.setState({ speaking: true });
+    };
+    utter.onend = () => {
+      clearTimeout(myTimeout);
+      this.setState({ speaking: false });
+    };
+    synth.speak(utter);
+  };
+
+  /**
+   * Change the speech image to show when the VA is speaking
+   */
+  getSpeakImage = () => {
+    if (this.state.loading) {
+      return process.env.PUBLIC_URL + "/images/voice-loading.gif";
+    } else if (this.state.speaking) {
+      return process.env.PUBLIC_URL + "/images/voice.gif";
+    } else {
+      return process.env.PUBLIC_URL + "/images/no-voice.png";
+    }
+  };
+
   render() {
     if (!this.state.render) {
       return (
@@ -71,7 +123,7 @@ class App extends Component {
           <div className="col-5"></div>
           <div className="col-3 h2 text-right pr-5">
             <div className="largerh1">
-              <Weather type={1} ref={this.weatherRef} />
+              <Weather type={1} ref={this.weatherRef} speak={this.speak} />
             </div>
             <Weather type={2} />
           </div>
@@ -95,12 +147,18 @@ class App extends Component {
             <br></br>
           </div>
           <div className="col-3 align-left pl-5">
-            <Todo ref={this.todoRef} />
+            <Todo ref={this.todoRef} speak={this.speak} />
           </div>
           <div className="col-3"></div>
           <div className="col-2"></div>
           <div className="col-4">
+            <img
+              src={this.getSpeakImage()}
+              alt=""
+              style={{ height: 140 }}
+            ></img>
             <VoiceAssistant
+              speak={this.speak}
               sayWeather={this.sayWeather}
               sayTasks={this.sayTasks}
             />

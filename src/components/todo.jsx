@@ -48,16 +48,13 @@ class App extends Component {
    * Make Voice Assistant read out tasks
    */
   sayTasks = () => {
-    const synth = window.speechSynthesis;
-    const utter = new SpeechSynthesisUtterance();
-    utter.voice = synth.getVoices()[3];
-    utter.text = `Your tasks for today are`;
+    let text = `Your tasks for today are`;
     let i = 0;
     for (i = 0; i < this.state.tasks.length - 1; i++) {
-      utter.text += this.state.tasks[i].title + ", ";
+      text += this.state.tasks[i].title + ", ";
     }
-    utter.text += "and finally, " + this.state.tasks[i].title;
-    synth.speak(utter);
+    text += "and finally, " + this.state.tasks[i].title;
+    this.props.speak(text);
   };
 
   render() {

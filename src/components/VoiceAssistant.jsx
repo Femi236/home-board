@@ -8,13 +8,11 @@ import { wikiSearch } from "./voiceAssistantHelpers/wikiSearch";
 import { tellJoke } from "./voiceAssistantHelpers/tellJoke";
 
 const VoiceAssistant = (props) => {
-  // Text to speech
-  let synth = window.speechSynthesis;
   // States
   const [listening, setListening] = useState(false);
   const [img, setImg] = useState("/images/mute.svg");
-  const [speaking, setSpeaking] = useState(false);
-  const [loading, setLoading] = useState(false);
+
+  const { speak } = props;
 
   //////////////////////////////////////////////////////COMMANDS//////////////////////////////////////////////////////////
 
@@ -55,9 +53,9 @@ const VoiceAssistant = (props) => {
         } else if (command.includes("weather")) {
           props.sayWeather();
         } else if (command.includes("task") || command.includes("tasks")) {
-          setSpeaking(true);
+          // setSpeaking(true);
           props.sayTasks();
-          setTimeout(setSpeaking(false), 10000);
+          // setTimeout(setSpeaking(false), 10000);
         } else {
           speak("I didn't quite get that");
         }
@@ -101,53 +99,6 @@ const VoiceAssistant = (props) => {
     console.log("Browser does not support speech recognition");
     return null;
   }
-
-  //////////////////////////////////////////////////////SPEAKING//////////////////////////////////////////////////////////
-
-  /**
-   * Quickly stop and restart the speech synthesis because ti times out after around 10 seconds
-   */
-  var myTimeout;
-  function myTimer() {
-    window.speechSynthesis.pause();
-    window.speechSynthesis.resume();
-    myTimeout = setTimeout(myTimer, 10000);
-  }
-
-  /**
-   * Make the speech synthesis say text while animating the speech gif
-   * @param text the text to say
-   */
-  const speak = (text) => {
-    setLoading(true);
-    let utter = new SpeechSynthesisUtterance();
-    // Using the timeout function so it doesn't suddenly stop
-    myTimeout = setTimeout(myTimer, 10000);
-    utter.voice = synth.getVoices()[3];
-    utter.text = text;
-    utter.onstart = function () {
-      setLoading(false);
-      setSpeaking(true);
-    };
-    utter.onend = function () {
-      clearTimeout(myTimeout);
-      setSpeaking(false);
-    };
-    synth.speak(utter);
-  };
-
-  /**
-   * Change the speech image to show when the VA is speaking
-   */
-  const getSpeakImage = () => {
-    if (loading) {
-      return process.env.PUBLIC_URL + "/images/voice-loading.gif";
-    } else if (speaking) {
-      return process.env.PUBLIC_URL + "/images/voice.gif";
-    } else {
-      return process.env.PUBLIC_URL + "/images/no-voice.png";
-    }
-  };
 
   //////////////////////////////////////////////////////LISTENING//////////////////////////////////////////////////////////
 
@@ -204,11 +155,6 @@ const VoiceAssistant = (props) => {
         alt=""
         style={{ height: 40 }}
       ></img>
-      {/* <button onClick={() => wikiSearch("michael jordan")}>search</button>
-      <button onClick={() => thisWikiSearch("Michael Jordan")}>speak</button> */}
-      {/* <button onClick={() => thisTellJoke()}>Joke</button> */}
-      {/* <p>{transcript}</p> */}
-      <img src={getSpeakImage()} alt="" style={{ height: 140 }}></img>
     </div>
   );
 };

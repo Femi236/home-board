@@ -36,12 +36,8 @@ class Weather extends Component {
    * Make voice assistant say the weather
    */
   sayWeather = () => {
-    const synth = window.speechSynthesis;
-    const utter = new SpeechSynthesisUtterance();
-    utter.voice = synth.getVoices()[3];
-    utter.text = `The weather is ${this.state.temp} degrees`;
-    synth.speak(utter);
-    console.log("Hit weather");
+    let text = `The weather is ${this.state.temp} degrees`;
+    this.props.speak(text);
   };
 
   render() {
