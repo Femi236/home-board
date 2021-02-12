@@ -145,6 +145,19 @@ const VoiceAssistant = (props) => {
     }
   };
 
+  /**
+   * Change the speech image to show when the VA is speaking
+   */
+  const getSpeakImage = () => {
+    if (props.loading) {
+      return process.env.PUBLIC_URL + "/images/voice-loading.gif";
+    } else if (props.speaking) {
+      return process.env.PUBLIC_URL + "/images/voice.gif";
+    } else {
+      return process.env.PUBLIC_URL + "/images/no-voice.png";
+    }
+  };
+
   //////////////////////////////////////////////////////RENDER//////////////////////////////////////////////////////////
 
   return (
@@ -155,6 +168,7 @@ const VoiceAssistant = (props) => {
         alt=""
         style={{ height: 40 }}
       ></img>
+      <img src={getSpeakImage()} alt="" style={{ height: 140 }}></img>
     </div>
   );
 };

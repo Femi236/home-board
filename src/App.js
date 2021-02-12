@@ -87,19 +87,6 @@ class App extends Component {
     synth.speak(utter);
   };
 
-  /**
-   * Change the speech image to show when the VA is speaking
-   */
-  getSpeakImage = () => {
-    if (this.state.loading) {
-      return process.env.PUBLIC_URL + "/images/voice-loading.gif";
-    } else if (this.state.speaking) {
-      return process.env.PUBLIC_URL + "/images/voice.gif";
-    } else {
-      return process.env.PUBLIC_URL + "/images/no-voice.png";
-    }
-  };
-
   render() {
     if (!this.state.render) {
       return (
@@ -152,15 +139,12 @@ class App extends Component {
           <div className="col-3"></div>
           <div className="col-2"></div>
           <div className="col-4">
-            <img
-              src={this.getSpeakImage()}
-              alt=""
-              style={{ height: 140 }}
-            ></img>
             <VoiceAssistant
               speak={this.speak}
               sayWeather={this.sayWeather}
               sayTasks={this.sayTasks}
+              loading={this.state.loading}
+              speaking={this.state.speaking}
             />
             <Quote />
           </div>
