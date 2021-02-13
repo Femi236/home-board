@@ -1,70 +1,76 @@
-# Getting Started with Create React App
+# Home Board React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a personal project I created to help me get comfortable with Javascript, React and API calls.
 
-## Available Scripts
+## Functionalities
 
-In the project directory, you can run:
+- Show date and time
+- Show todo list made on Microsoft Todo
+- Show currently playing song in Spotify
+- Show weather
+- Show a random quote
+- Show a random background image
+- Tell a joke
+- Search the definition of something on Wikipedia
+- Voice assistant with more functionality
 
-### `npm start`
+## Pre-Requisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Node.js
+- Spotify Pro account
+- Microsoft account
+- OpenWeatherMap account
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Installing the project
 
-### `npm test`
+To download this project, cloan this Git repository and install the node dependencies by running:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    $ npm install
 
-### `npm run build`
+This project also depends on a Spotify server which you can download from [this repository](https://github.com/Femi236/pi-app-spotify-server)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Setting up the application
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Before being able to run the application, you will have to create a .env file in the root folder and define 2 variables:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    $ REACT_APP_WEATHER_API_KEY=""
+    $ REACT_APP_MICROSOFT_CLIENT_KEY=""
 
-### `npm run eject`
+The quotation marks can be replaced with the API keys you receive once creating accounts for [OpenWeatherMap Api](https://openweathermap.org/) and [Microsoft AzureAD](https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Running the application
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The [Spotify server](https://github.com/Femi236/pi-app-spotify-server) that you installed earlier has to be run first by following the instructions on that repository.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+The application can then be run by typing the following in the terminal:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+    $ npm start
 
-## Learn More
+This will open a new browser window in [localhost:3000](http://localhost:3000).
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Running the application as a desktop application
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+It is also possible to run the application as a desktop application by typing typing the following in the terminal:
 
-### Code Splitting
+    $ npm run-script electron-dev
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Resources used
 
-### Analyzing the Bundle Size
+There were numerous resources that had to be used in order to create this pplication but these are the ones that had the largest impact on the progress.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- [Programming with Mosh ReactJs tutorial](https://youtu.be/Ke90Tje7VS0)
+- [Bootstrap Tutorial](https://youtu.be/9cKsq14Kfsw)
+- [ReactJs API tutorial](https://youtu.be/GuA0_Z1llYU)
+- [Electron Application Tutorial](https://youtu.be/VCl8li22mrA)
+- [React App to Electron Desktop App](https://medium.com/@kitze/%EF%B8%8F-from-react-to-an-electron-app-ready-for-production-a0468ecb1da3)
+- [Voice Assistant Tutorial in Python](https://youtu.be/AWvsXxDtEkU)
 
-### Making a Progressive Web App
+## API's Used
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [OpenWeatherMap](https://openweathermap.org/)
+- [AzureAD](https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app)
+- [QuotesAPI](https://type.fit/api/quotes)
+- [Spotify](https://github.com/Femi236/pi-app-spotify-server)
+- [JokesAPI](https://sv443.net/jokeapi/v2/)
+- [Wikipedia](https://www.mediawiki.org/wiki/API:Main_page)
+- [Lorem Picsum](https://picsum.photos/)

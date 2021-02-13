@@ -38,7 +38,7 @@ class Spotify extends Component {
 
   componentDidMount() {
     // Call from the API every half second
-    this.spotifyID = setInterval(() => this.getNowPlaying(), 500);
+    this.spotifyID = setInterval(() => this.getNowPlaying(), 2000);
   }
 
   /**

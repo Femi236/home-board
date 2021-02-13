@@ -39,14 +39,30 @@ class Clock extends Component {
   returnedTime = (props) => {
     // Return different parts of the time depending on the type of component called
     if (this.props.type === 1) {
-      return this.state.date.toLocaleTimeString();
-    } else if (this.props.type === 2) {
-      return this.state.weekday[this.state.date.getDay()];
-    } else if (this.props.type === 3) {
       return (
-        this.state.month[this.state.date.getMonth()] +
-        " " +
-        this.state.date.getDate()
+        <React.Fragment>
+          {(this.state.date.getHours().toLocaleString() < 10
+            ? "0" + this.state.date.getHours().toLocaleString()
+            : this.state.date.getHours().toLocaleString()) +
+            ":" +
+            (this.state.date.getMinutes() < 10
+              ? "0" + this.state.date.getMinutes().toLocaleString()
+              : this.state.date.getMinutes().toLocaleString())}
+          <sup>
+            {this.state.date.getSeconds() < 10
+              ? "0" + this.state.date.getSeconds()
+              : this.state.date.getSeconds()}
+          </sup>
+        </React.Fragment>
+      );
+    } else if (this.props.type === 2) {
+      return (
+        <React.Fragment>
+          {this.state.weekday[this.state.date.getDay()] + " "}
+          {this.state.month[this.state.date.getMonth()] +
+            " " +
+            this.state.date.getDate()}
+        </React.Fragment>
       );
     }
   };

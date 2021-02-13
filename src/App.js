@@ -7,14 +7,19 @@ import Weather from "./components/weather";
 import Spotify from "./components/spotify";
 import ImageSlideshow from "./components/imagelideshow";
 import Quote from "./components/quotes";
-import VoiceAssistant from "./components/VoiceAssistant";
+import VoiceAssistant from "./components/voiceAssistant";
 import Todo from "./components/todo";
+
+var myTimeout;
+let synth = window.speechSynthesis;
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      render: false, //Set render state to false
+      render: true,
+      speaking: false,
+      loading: false, //Set render state to false
     };
 
     // Create references to different components that we need to access their methods
@@ -45,7 +50,41 @@ class App extends Component {
    */
   sayTasks = () => {
     // Call say tasks method in the Todo component
-    this.todoRef.current.getAllTasks();
+    this.todoRef.current.sayTasks();
+  };
+
+  //////////////////////////////////////////////////////SPEAKING//////////////////////////////////////////////////////////
+
+  /**
+   * Quickly stop and restart the speech synthesis because ti times out after around 10 seconds
+   */
+
+  myTimer = () => {
+    window.speechSynthesis.pause();
+    window.speechSynthesis.resume();
+    myTimeout = setTimeout(this.myTimer, 10000);
+  };
+
+  /**
+   * Make the speech synthesis say text while animating the speech gif
+   * @param text the text to say
+   */
+  speak = (text) => {
+    this.setState({ loading: true });
+    let utter = new SpeechSynthesisUtterance();
+    // Using the timeout function so it doesn't suddenly stop
+    myTimeout = setTimeout(this.myTimer, 10000);
+    utter.voice = synth.getVoices()[3];
+    utter.text = text;
+    utter.onstart = () => {
+      this.setState({ loading: false });
+      this.setState({ speaking: true });
+    };
+    utter.onend = () => {
+      clearTimeout(myTimeout);
+      this.setState({ speaking: false });
+    };
+    synth.speak(utter);
   };
 
   render() {
@@ -59,34 +98,54 @@ class App extends Component {
     return (
       <React.Fragment>
         <div className="row container-fluid pt-3">
-          <div className="col-3 h1 align-left">
-            <Clock type={1} />
+          <div className="col-4 h2 align-left text-left pl-5">
+            <Clock type={2} />
+            <div className="largerh1">
+              <Clock type={1} />
+            </div>
+
             <ImageSlideshow />
           </div>
 
-          <div className="col-6"></div>
-          <div className="col-3 h1 text-left">
-            <Clock type={2} />
-            <Clock type={3} />
+          <div className="col-5"></div>
+          <div className="col-3 h2 text-right pr-5">
+            <div className="largerh1">
+              <Weather type={1} ref={this.weatherRef} speak={this.speak} />
+            </div>
+            <Weather type={2} />
           </div>
 
           <div className="w-100 d-none d-md-block">
-            <Spotify />
+            <div className="uplift">
+              <Spotify />
+            </div>
           </div>
           <div className="w-100 d-none d-md-block"></div>
           <div className="w-100 d-none d-md-block"></div>
           <div className="w-100 d-none d-md-block"></div>
-          <div className="col-3 align-left">
-            <Weather ref={this.weatherRef} />
+          <div className="w-100 d-none d-md-block"></div>
+          <div className="w-100 d-none d-md-block"></div>
+          <div className="w-100 d-none d-md-block">
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
           </div>
-          <div className="col-3">
+          <div className="col-3 align-left pl-5">
+            <Todo ref={this.todoRef} speak={this.speak} />
+          </div>
+          <div className="col-3"></div>
+          <div className="col-2"></div>
+          <div className="col-4">
             <VoiceAssistant
+              speak={this.speak}
               sayWeather={this.sayWeather}
               sayTasks={this.sayTasks}
+              loading={this.state.loading}
+              speaking={this.state.speaking}
             />
-            <Todo ref={this.todoRef} />
-          </div>
-          <div className="col-6">
             <Quote />
           </div>
         </div>
