@@ -7,12 +7,15 @@ import SpeechRecognition, {
 import { wikiSearch } from "./voiceAssistantHelpers/wikiSearch";
 import { tellJoke } from "./voiceAssistantHelpers/tellJoke";
 
+const VA_NAME = "Google";
+const MY_NAME = "Bro";
+
 const VoiceAssistant = (props) => {
   // States
   const [listening, setListening] = useState(false);
   const [img, setImg] = useState("/images/mute.svg");
   const [showTranscript, setShowTranscript] = useState(false);
-  const [transcriptReset, setTranscriptReset] = useState(false);
+  const [transcriptReset, setTranscriptReset] = useState(0);
 
   const { speak } = props;
 
@@ -23,7 +26,7 @@ const VoiceAssistant = (props) => {
    */
   const commands1 = [
     {
-      command: "Hey Google *", //["Hello", "Hi"],
+      command: [`Hey ${VA_NAME} *`, `${VA_NAME} *`],
       callback: (command) => {
         command = command.toLowerCase();
         console.log("Command: " + command);
@@ -71,7 +74,7 @@ const VoiceAssistant = (props) => {
           command === "let me see the transcript"
         ) {
           setShowTranscript(true);
-          setTranscriptReset(false);
+          setTranscriptReset(0);
         } else if (
           command === "hide transcript" ||
           command === "hide the transcript"
@@ -83,21 +86,30 @@ const VoiceAssistant = (props) => {
           command === "delete the evidence"
         ) {
           resetTranscript();
+        } else if (["good morning", "morning"].includes(command)) {
+          const greetList = [
+            "Good morning, rise and grind my g",
+            "Good morning, it's time to chase that bread",
+          ];
+          speak(greetList[getRandomInt(greetList.length)]);
+        } else if (command === "briefing") {
+          props.sayWeather();
+          props.sayTasks();
+        }
+        // Random user experience responses
+        else if (command === "are you real") {
+          speak("I'm as real as you want me to be.");
         } else {
           speak("I didn't quite get that");
         }
-        if (transcriptReset) {
-          resetTranscript();
-        } else {
-          setTranscriptReset(true);
-        }
+        resetTranscript();
       },
       matchInterim: false,
     },
     {
-      command: "Hey Google",
+      command: [`Hey ${VA_NAME}`, `${VA_NAME}`],
       callback: () => {
-        speak("What can I help you with?");
+        speak(`What can I help you with ${MY_NAME}?`);
         setCommands(commands2);
       },
     },
@@ -173,6 +185,10 @@ const VoiceAssistant = (props) => {
     for (let i = 0; i < tj.length; i++) {
       speak(tj[i]);
     }
+  };
+
+  const getRandomInt = (max) => {
+    return Math.floor(Math.random() * Math.floor(max));
   };
 
   /**
