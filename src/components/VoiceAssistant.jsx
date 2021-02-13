@@ -11,6 +11,8 @@ const VoiceAssistant = (props) => {
   // States
   const [listening, setListening] = useState(false);
   const [img, setImg] = useState("/images/mute.svg");
+  const [showTranscript, setShowTranscript] = useState(false);
+  const [transcriptReset, setTranscriptReset] = useState(false);
 
   const { speak } = props;
 
@@ -24,43 +26,71 @@ const VoiceAssistant = (props) => {
       command: "Hey Google *", //["Hello", "Hi"],
       callback: (command) => {
         command = command.toLowerCase();
-        console.log("Command:");
-        console.log(command);
+        console.log("Command: " + command);
         if (command === undefined) {
-          speak("What can I help you with?");
-        } else if (command === "shut up") {
+          speak("That was undefined");
+        } else if (command === "shut up" || command === "stop talking") {
           window.speechSynthesis.cancel();
-        } else if (command === "how are you") {
+        } else if (
+          command === "how are you" ||
+          command === "what's up" ||
+          command === "are you good"
+        ) {
           speak("I am fine. How are you? Just kidding, I don't care");
-        } else if (command === "stop listening") {
+        } else if (
+          command === "stop listening" ||
+          command === "stop being a creep" ||
+          command === "mute"
+        ) {
           stopListening();
           speak("Aight, I didn't wanna hear your raspy voice anyways");
-        } else if (command === "tell me a joke") {
+        } else if (command.includes("joke")) {
           thisTellJoke();
-        } else if (command === "what time is it") {
+        } else if (command.includes("time")) {
           let time = new Date();
           speak(`it is ${time.toLocaleTimeString()}`);
-        } else if (command.includes("who is")) {
-          let search = command.replace("who is", "");
-          thisWikiSearch(search);
         } else if (
-          command.includes("why is") &&
-          command.includes("so annoying")
+          command.includes("who is") ||
+          command.includes("what is") ||
+          command.includes("what does")
         ) {
-          command = command.replace("why is", "");
-          command = command.replace("so annoying", "");
-          speak(`I don't know why ${command} is so annoying`);
+          let search = command.replace("who is", "");
+          search = search.replace("what is", "");
+          search = search.replace("what does", "");
+          search = search.replace("mean", "");
+          console.log(search);
+          thisWikiSearch(search);
         } else if (command.includes("weather")) {
           props.sayWeather();
         } else if (command.includes("task") || command.includes("tasks")) {
-          // setSpeaking(true);
           props.sayTasks();
-          // setTimeout(setSpeaking(false), 10000);
+        } else if (
+          command === "show transcript" ||
+          command === "show me the transcript" ||
+          command === "display transcript" ||
+          command === "let me see the transcript"
+        ) {
+          setShowTranscript(true);
+          setTranscriptReset(false);
+        } else if (
+          command === "hide transcript" ||
+          command === "hide the transcript"
+        ) {
+          setShowTranscript(false);
+        } else if (
+          command === "delete transcript" ||
+          command === "clear transcript" ||
+          command === "delete the evidence"
+        ) {
+          resetTranscript();
         } else {
           speak("I didn't quite get that");
         }
-
-        resetTranscript();
+        if (transcriptReset) {
+          resetTranscript();
+        } else {
+          setTranscriptReset(true);
+        }
       },
       matchInterim: false,
     },
@@ -162,6 +192,9 @@ const VoiceAssistant = (props) => {
 
   return (
     <div>
+      <div>
+        {showTranscript ? transcript : <React.Fragment></React.Fragment>}
+      </div>
       <img
         onClick={() => (listening ? stopListening() : startListening())}
         src={process.env.PUBLIC_URL + img}

@@ -41,7 +41,7 @@ class Weather extends Component {
   };
 
   render() {
-    if (this.props.type == 1) {
+    if (this.props.type === 1) {
       return (
         <React.Fragment>
           <img
@@ -52,7 +52,7 @@ class Weather extends Component {
         </React.Fragment>
       );
     }
-    if (this.props.type == 2) {
+    if (this.props.type === 2) {
       return (
         <React.Fragment>Feels Like {this.state.feels_like}°C</React.Fragment>
       );

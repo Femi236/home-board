@@ -64,7 +64,9 @@ class App extends Component {
         <hr></hr>
         <div>
           {this.state.tasks.slice(0, 5).map((task) => (
-            <p className="rectangle text-left pl-3">{task.title}</p>
+            <p key={task.id} className="rectangle text-left pl-3">
+              {task.title}
+            </p>
           ))}
         </div>
       </React.Fragment>

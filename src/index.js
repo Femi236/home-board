@@ -38,6 +38,16 @@ ReactDOM.render(
             );
           case AuthenticationState.InProgress:
             return <p>Authenticating...</p>;
+
+          default:
+            return (
+              <div>
+                <p>
+                  <span>Hey stranger, you look new!</span>
+                  <button onClick={login}>Login</button>
+                </p>
+              </div>
+            );
         }
       }}
     </AzureAD>
