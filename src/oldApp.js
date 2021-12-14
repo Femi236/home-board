@@ -262,12 +262,18 @@ function ProfileContent() {
       });
   }
 
-  document.onkeydown = function (evt) {
+  function LKeyHandler(evt) {
+    console.log("clicked L");
     evt = evt || window.event;
     if (evt.code === "KeyL") {
       RequestProfileData();
     }
-  };
+  }
+
+  useEffect(() => {
+    document.addEventListener("keypress", LKeyHandler);
+    return () => document.removeEventListener("keypress", LKeyHandler);
+  });
 
   return (
     <React.Fragment>
