@@ -130,8 +130,8 @@ class App extends Component {
             <Weather type={2} />
           </div>
 
-          <div className="w-100 d-none d-md-block">
-            <div className="uplift">
+          <div className="w-100 d-none d-md-block uplift">
+            <div className="">
               <Spotify />
             </div>
           </div>
@@ -150,7 +150,6 @@ class App extends Component {
           </div>
           <div className="col-3 align-left pl-5">
             {/* <AuthenticatedTemplate> */}
-            <p>Hello</p>
             <ProfileContent />
             {/* <Todo ref={this.todoRef} speak={this.speak} /> */}
             {/* </AuthenticatedTemplate> */}
@@ -204,17 +203,17 @@ function ProfileContent() {
 
   // console.log("RESULT: ", error);
 
-  // useEffect(() => {
-  //   if (error) {
-  //     console.log("Hit auto login error");
-  //     console.log(error);
-  //     // login(InteractionType.Redirect);
-  //     instance.loginRedirect(loginRequest); //.then(RequestProfileData());
-  //   }
-  //   // else{
-  //   //   RequestProfileData();
-  //   // }
-  // }, [error]);
+  useEffect(() => {
+    if (error) {
+      console.log("Hit auto login error");
+      console.log(error);
+      // login(InteractionType.Redirect);
+      // instance.loginRedirect(loginRequest); //.then(RequestProfileData());
+    }
+    // else{
+    //   RequestProfileData();
+    // }
+  }, [error]);
 
   const name = accounts[0] && accounts[0].name;
 
@@ -263,6 +262,13 @@ function ProfileContent() {
       });
   }
 
+  document.onkeydown = function (evt) {
+    evt = evt || window.event;
+    if (evt.code === "KeyL") {
+      RequestProfileData();
+    }
+  };
+
   return (
     <React.Fragment>
       <AuthenticatedTemplate>
@@ -280,14 +286,6 @@ function ProfileContent() {
           <></>
         )}
       </div>{" "}
-      <h5 className="card-title text-primary">Welcome {name}</h5>
-      {graphData ? (
-        <ProfileData graphData={graphData} />
-      ) : (
-        <Button variant="secondary" onClick={RequestProfileData}>
-          Request Profile Information
-        </Button>
-      )}
     </React.Fragment>
     // <>
     //   <h5 className="card-title text-primary">Welcome {name}</h5>
