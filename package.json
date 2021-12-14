@@ -16,6 +16,8 @@
   },
   "private": true,
   "dependencies": {
+    "@azure/msal-browser": "^2.20.0",
+    "@azure/msal-react": "^1.1.2",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.2",
@@ -26,6 +28,7 @@
     "msal": "^1.4.5",
     "react": "^17.0.1",
     "react-aad-msal": "^2.3.5",
+    "react-bootstrap": "^2.0.3",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
