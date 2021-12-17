@@ -231,13 +231,9 @@ function ProfileContent() {
   useEffect(() => {
     // Your code here
     const tryAuthenticate = setInterval(() => {
-      // if (isAuthenticated) {
-      console.log("trying");
-      // console.log(isAuthenticated);
-      RequestProfileData();
-      // } else {
-      // console.log("NEED AUTHENTICATION");
-      // }
+      if (isAuthenticated) {
+        RequestProfileData();
+      }
     }, 5 * 60 * 1000);
     return function stopTimer() {
       clearInterval(tryAuthenticate);
