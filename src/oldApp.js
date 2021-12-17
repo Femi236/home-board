@@ -195,6 +195,9 @@ function ProfileContent() {
   const [graphData, setGraphData] = useState(null);
   const [taskList, setTaskList] = useState(null);
   const isAuthenticated = useIsAuthenticated();
+  const [startSlice, setStartSlice] = useState(0);
+  const [endSlice, setEndSlice] = useState(3);
+  const [displayTasks, setDisplayTasks] = useState(true);
 
   const { login, result, error } = useMsalAuthentication(
     InteractionType.Silent,
@@ -225,7 +228,24 @@ function ProfileContent() {
     }
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    // Your code here
+    const tryAuthenticate = setInterval(() => {
+      // if (isAuthenticated) {
+      console.log("trying");
+      // console.log(isAuthenticated);
+      RequestProfileData();
+      // } else {
+      // console.log("NEED AUTHENTICATION");
+      // }
+    }, 5 * 60 * 1000);
+    return function stopTimer() {
+      clearInterval(tryAuthenticate);
+    };
+  }, [isAuthenticated]);
+
   function RequestProfileData() {
+    console.log(isAuthenticated);
     const request = {
       ...loginRequest,
       account: accounts[0],
@@ -237,17 +257,51 @@ function ProfileContent() {
     // Silently acquires an access token which is then attached to a request for Microsoft Graph data
     instance
       .acquireTokenSilent(request)
-      .then((response) => {
-        callMsGraph(response.accessToken).then((response) => {
-          let tasks = response.value;
-          let tempTaskList = tasks.filter((x) => x.status !== "completed");
-          console.log(tempTaskList);
-          setTaskList(tempTaskList);
+      .then((response1) => {
+        callMsGraph(response1.accessToken, "").then((response) => {
+          let lists = response.value;
+          let list_ids = lists.map((list) => list.id);
+
+          let itemsProcessed = 0;
+
+          console.log(lists);
+
+          let n = 100;
+
+          // for (list_id in list_ids)
+          let allTasks = [];
+          list_ids.forEach((list_id, index) => {
+            setTimeout(() => {
+              callMsGraph(response1.accessToken, `${list_id}/tasks`).then(
+                (res) => {
+                  allTasks.push(res.value);
+                  // console.log(res);
+                  itemsProcessed++;
+                  if (itemsProcessed === list_ids.length) {
+                    allTasks = allTasks
+                      .flat()
+                      .filter((x) => x.status !== "completed")
+                      .filter((x) => x.importance === "high");
+                    console.log(allTasks);
+                    setTaskList(allTasks);
+                    // console.log(allTasks.flat());
+                  }
+                }
+                // console.log(res)
+              );
+            }, n * index);
+
+            // console.log(taskGroup)
+          });
+
+          // let tempTaskList = tasks.filter((x) => x.status !== "completed");
+          // ;
+          // setTaskList(tempTaskList);
 
           // for (let i = 0; i < taskList.length; i++) {
           //   console.log(taskList[i].title);
           // }
-          setGraphData(response);
+          // setGraphData(response);
         });
       })
       .catch((e) => {
@@ -255,7 +309,7 @@ function ProfileContent() {
         console.log(e);
         console.log(inProgress === InteractionStatus.None);
         instance.acquireTokenPopup(request).then((response) => {
-          callMsGraph(response.accessToken).then((response) =>
+          callMsGraph(response.accessToken, "").then((response) =>
             setGraphData(response)
           );
         });
@@ -263,10 +317,35 @@ function ProfileContent() {
   }
 
   function LKeyHandler(evt) {
-    console.log("clicked L");
+    console.log(evt);
     evt = evt || window.event;
     if (evt.code === "KeyL") {
       RequestProfileData();
+    }
+    if (evt.key === "[") {
+      moveSlicesUp();
+    }
+    if (evt.key === "]") {
+      moveSlicesDown();
+    }
+    if (evt.code === "Backslash") {
+      setDisplayTasks(!displayTasks);
+    }
+  }
+
+  function moveSlicesDown() {
+    if (endSlice < taskList.length) {
+      console.log("move down");
+      setStartSlice(startSlice + 1);
+      setEndSlice(endSlice + 1);
+    }
+  }
+
+  function moveSlicesUp() {
+    if (startSlice > 0) {
+      console.log("move up");
+      setStartSlice(startSlice - 1);
+      setEndSlice(endSlice - 1);
     }
   }
 
@@ -282,8 +361,8 @@ function ProfileContent() {
       </AuthenticatedTemplate>
       <hr></hr>
       <div>
-        {taskList !== null ? (
-          taskList.slice(0, 5).map((task) => (
+        {displayTasks && taskList !== null ? (
+          taskList.slice(startSlice, endSlice).map((task) => (
             <p key={task.id} className="rectangle text-left pl-3">
               {task.title}
             </p>

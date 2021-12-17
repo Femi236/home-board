@@ -17,7 +17,7 @@ export const loginRequest = {
 
 // Add the endpoints here for Microsoft Graph API services you'd like to use.
 export const graphConfig = {
-  graphMeEndpoint:
-    "https://graph.microsoft.com/v1.0/me/todo/lists/AQMkADAwATMwMAItMjIAM2ItOGJkYi0wMAItMDAKAC4AAAPsE0bgVciJS53tz5qGuCfJAQD4bxjVsPprRZ7XeMcIESaWAAFORSDGAAAA/tasks",
+  graphMeEndpoint: "https://graph.microsoft.com/v1.0/me/todo/lists/",
+  // "https://graph.microsoft.com/v1.0/me/todo/lists/AQMkADAwATMwMAItMjIAM2ItOGJkYi0wMAItMDAKAC4AAAPsE0bgVciJS53tz5qGuCfJAQD4bxjVsPprRZ7XeMcIESaWAAFORSDGAAAA/tasks",
   //   graphMeEndpoint: "https://graph.microsoft.com/v1.0/me/",
 };
