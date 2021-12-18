@@ -242,84 +242,91 @@ function ProfileContent() {
 
   function RequestProfileData() {
     console.log(isAuthenticated);
-    const request = {
-      ...loginRequest,
-      account: accounts[0],
-    };
+    if (accounts.length > 0) {
+      const request = {
+        ...loginRequest,
+        account: accounts[0],
+      };
 
-    // console.log("IN REQUESTING");
-    // console.log(isAuthenticated);
+      // console.log("IN REQUESTING");
+      // console.log(isAuthenticated);
 
-    // Silently acquires an access token which is then attached to a request for Microsoft Graph data
-    instance
-      .acquireTokenSilent(request)
-      .then((response1) => {
-        callMsGraph(response1.accessToken, "").then((response) => {
-          let lists = response.value;
-          let list_ids = lists.map((list) => list.id);
+      // Silently acquires an access token which is then attached to a request for Microsoft Graph data
+      instance
+        .acquireTokenSilent(request)
+        .then((response1) => {
+          callMsGraph(response1.accessToken, "").then((response) => {
+            let lists = response.value;
+            let list_ids = lists.map((list) => list.id);
 
-          let itemsProcessed = 0;
+            let itemsProcessed = 0;
 
-          console.log(lists);
+            console.log(lists);
 
-          let n = 100;
+            let n = 100;
 
-          // for (list_id in list_ids)
-          let allTasks = [];
-          list_ids.forEach((list_id, index) => {
-            setTimeout(() => {
-              callMsGraph(response1.accessToken, `${list_id}/tasks`).then(
-                (res) => {
-                  allTasks.push(res.value);
-                  // console.log(res);
-                  itemsProcessed++;
-                  if (itemsProcessed === list_ids.length) {
-                    allTasks = allTasks
-                      .flat()
-                      .filter((x) => x.status !== "completed")
-                      .filter((x) => x.importance === "high");
-                    console.log(allTasks);
-                    setTaskList(allTasks);
-                    // console.log(allTasks.flat());
+            // for (list_id in list_ids)
+            let allTasks = [];
+            list_ids.forEach((list_id, index) => {
+              setTimeout(() => {
+                callMsGraph(response1.accessToken, `${list_id}/tasks`).then(
+                  (res) => {
+                    allTasks.push(res.value);
+                    // console.log(res);
+                    itemsProcessed++;
+                    if (itemsProcessed === list_ids.length) {
+                      allTasks = allTasks
+                        .flat()
+                        .filter((x) => x.status !== "completed")
+                        .filter((x) => x.importance === "high");
+                      console.log(allTasks);
+                      if (
+                        allTasks !== undefined &&
+                        typeof allTasks !== "undefined"
+                      ) {
+                        setTaskList(allTasks);
+                      }
+                      // console.log(allTasks.flat());
+                    }
                   }
-                }
-                // console.log(res)
-              );
-            }, n * index);
+                  // console.log(res)
+                );
+              }, n * index);
 
-            // console.log(taskGroup)
+              // console.log(taskGroup)
+            });
+
+            // let tempTaskList = tasks.filter((x) => x.status !== "completed");
+            // ;
+            // setTaskList(tempTaskList);
+
+            // for (let i = 0; i < taskList.length; i++) {
+            //   console.log(taskList[i].title);
+            // }
+            // setGraphData(response);
           });
-
-          // let tempTaskList = tasks.filter((x) => x.status !== "completed");
-          // ;
-          // setTaskList(tempTaskList);
-
-          // for (let i = 0; i < taskList.length; i++) {
-          //   console.log(taskList[i].title);
-          // }
-          // setGraphData(response);
+        })
+        // .catch((e) => {
+        //   console.log("NEED TO ACQUIRE TOKEN SILENT");
+        //   console.log(e);
+        //   console.log(inProgress === InteractionStatus.None);
+        //   instance.acquireTokenSilent(request).then((response) => {
+        //     callMsGraph(response.accessToken, "").then((response) =>
+        //       setGraphData(response)
+        //     );
+        //   });
+        // })
+        .catch((e) => {
+          console.log("NEED TO ACQUIRE TOKEN POPUP");
+          console.log(e);
+          console.log(inProgress === InteractionStatus.None);
+          instance.acquireTokenPopup(request).then((response) => {
+            callMsGraph(response.accessToken, "").then((response) =>
+              setGraphData(response)
+            );
+          });
         });
-      })
-      .catch((e) => {
-        console.log("NEED TO ACQUIRE TOKEN SILENT");
-        console.log(e);
-        console.log(inProgress === InteractionStatus.None);
-        instance.acquireTokenSilent(request).then((response) => {
-          callMsGraph(response.accessToken, "").then((response) =>
-            setGraphData(response)
-          );
-        });
-      })
-      .catch((e) => {
-        console.log("NEED TO ACQUIRE TOKEN POPUP");
-        console.log(e);
-        console.log(inProgress === InteractionStatus.None);
-        instance.acquireTokenPopup(request).then((response) => {
-          callMsGraph(response.accessToken, "").then((response) =>
-            setGraphData(response)
-          );
-        });
-      });
+    }
   }
 
   function LKeyHandler(evt) {
