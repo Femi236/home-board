@@ -301,7 +301,17 @@ function ProfileContent() {
         });
       })
       .catch((e) => {
-        console.log("HIT ERROR");
+        console.log("NEED TO ACQUIRE TOKEN SILENT");
+        console.log(e);
+        console.log(inProgress === InteractionStatus.None);
+        instance.acquireTokenSilent(request).then((response) => {
+          callMsGraph(response.accessToken, "").then((response) =>
+            setGraphData(response)
+          );
+        });
+      })
+      .catch((e) => {
+        console.log("NEED TO ACQUIRE TOKEN POPUP");
         console.log(e);
         console.log(inProgress === InteractionStatus.None);
         instance.acquireTokenPopup(request).then((response) => {
