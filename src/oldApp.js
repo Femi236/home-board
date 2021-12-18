@@ -275,15 +275,15 @@ function ProfileContent() {
                     // console.log(res);
                     itemsProcessed++;
                     if (itemsProcessed === list_ids.length) {
-                      allTasks = allTasks
-                        .flat()
-                        .filter((x) => x.status !== "completed")
-                        .filter((x) => x.importance === "high");
-                      console.log(allTasks);
                       if (
                         allTasks !== undefined &&
                         typeof allTasks !== "undefined"
                       ) {
+                        allTasks = allTasks
+                          .flat()
+                          .filter((x) => x.status !== "completed")
+                          .filter((x) => x.importance === "high");
+                        console.log(allTasks);
                         setTaskList(allTasks);
                       } else {
                         console.log("Tasks returned undefined");
