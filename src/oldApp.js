@@ -285,6 +285,8 @@ function ProfileContent() {
                         typeof allTasks !== "undefined"
                       ) {
                         setTaskList(allTasks);
+                      } else {
+                        console.log("Tasks returned undefined");
                       }
                       // console.log(allTasks.flat());
                     }
