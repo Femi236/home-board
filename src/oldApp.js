@@ -255,58 +255,63 @@ function ProfileContent() {
       instance
         .acquireTokenSilent(request)
         .then((response1) => {
-          callMsGraph(response1.accessToken, "").then((response) => {
-            let lists = response.value;
-            let list_ids = lists.map((list) => list.id);
+          callMsGraph(response1.accessToken, "")
+            .then((response) => {
+              let lists = response.value;
+              let list_ids = lists.map((list) => list.id);
 
-            let itemsProcessed = 0;
+              let itemsProcessed = 0;
 
-            console.log(lists);
+              console.log(lists);
 
-            let n = 100;
+              let n = 100;
 
-            // for (list_id in list_ids)
-            let allTasks = [];
-            list_ids.forEach((list_id, index) => {
-              setTimeout(() => {
-                callMsGraph(response1.accessToken, `${list_id}/tasks`).then(
-                  (res) => {
-                    allTasks.push(res.value);
-                    // console.log(res);
-                    itemsProcessed++;
-                    if (itemsProcessed === list_ids.length) {
-                      if (
-                        allTasks !== undefined &&
-                        typeof allTasks !== "undefined"
-                      ) {
-                        allTasks = allTasks
-                          .flat()
-                          .filter((x) => x.status !== "completed")
-                          .filter((x) => x.importance === "high");
-                        console.log(allTasks);
-                        setTaskList(allTasks);
-                      } else {
-                        console.log("Tasks returned undefined");
+              // for (list_id in list_ids)
+              let allTasks = [];
+              list_ids.forEach((list_id, index) => {
+                setTimeout(() => {
+                  callMsGraph(response1.accessToken, `${list_id}/tasks`).then(
+                    (res) => {
+                      allTasks.push(res.value);
+                      // console.log(res);
+                      itemsProcessed++;
+                      if (itemsProcessed === list_ids.length) {
+                        if (
+                          allTasks !== undefined &&
+                          typeof allTasks !== "undefined"
+                        ) {
+                          allTasks = allTasks
+                            .flat()
+                            .filter((x) => x.status !== "completed")
+                            .filter((x) => x.importance === "high");
+                          console.log(allTasks);
+                          setTaskList(allTasks);
+                        } else {
+                          console.log("Tasks returned undefined");
+                        }
+                        // console.log(allTasks.flat());
                       }
-                      // console.log(allTasks.flat());
                     }
-                  }
-                  // console.log(res)
-                );
-              }, n * index);
+                    // console.log(res)
+                  );
+                }, n * index);
 
-              // console.log(taskGroup)
+                // console.log(taskGroup)
+              });
+
+              // let tempTaskList = tasks.filter((x) => x.status !== "completed");
+              // ;
+              // setTaskList(tempTaskList);
+
+              // for (let i = 0; i < taskList.length; i++) {
+              //   console.log(taskList[i].title);
+              // }
+              // setGraphData(response);
+            })
+            .catch((e) => {
+              console.log("Caught MS error");
+              console.log(e);
             });
-
-            // let tempTaskList = tasks.filter((x) => x.status !== "completed");
-            // ;
-            // setTaskList(tempTaskList);
-
-            // for (let i = 0; i < taskList.length; i++) {
-            //   console.log(taskList[i].title);
-            // }
-            // setGraphData(response);
-          });
         })
         // .catch((e) => {
         //   console.log("NEED TO ACQUIRE TOKEN SILENT");
