@@ -7,9 +7,8 @@ import Weather from "./components/weather";
 import Spotify from "./components/spotify";
 import ImageSlideshow from "./components/imagelideshow";
 import Quote from "./components/quotes";
-//import VoiceAssistant from "./components/voiceAssistant";
+import VoiceAssistant from "./components/voiceAssistant";
 import Todo from "./components/todo";
-import ArduinoConnection from "./components/arduino/serverConnection";
 
 var myTimeout;
 let synth = window.speechSynthesis;
@@ -98,7 +97,6 @@ class App extends Component {
     }
     return (
       <React.Fragment>
-        <ArduinoConnection />
         <div className="row container-fluid pt-3">
           <div className="col-4 h2 align-left text-left pl-5">
             <Clock type={2} />
@@ -141,13 +139,13 @@ class App extends Component {
           <div className="col-3"></div>
           <div className="col-2"></div>
           <div className="col-4">
-            {/*<VoiceAssistant
+            <VoiceAssistant
               speak={this.speak}
               sayWeather={this.sayWeather}
               sayTasks={this.sayTasks}
               loading={this.state.loading}
               speaking={this.state.speaking}
-            />*/}
+            />
             <Quote />
           </div>
         </div>

@@ -77,7 +77,6 @@ class Spotify extends Component {
       .catch((e) => {
         if (e.status === 401) {
           // Refresh the token if the access_token is expired
-          console.log("I see", e)
           this.refresh();
         }
       });
@@ -87,14 +86,12 @@ class Spotify extends Component {
    * Refresh the access token
    */
   refresh = async () => {
-    console.log("REFRESHING")
     const apiCall = await fetch(
       `http://localhost:8888/refresh_token?refresh_token=${outsideRefresh}`
     );
     const data = await apiCall.json();
     outsideToken = data.access_token;
     let newRefresh = data.refresh_token;
-    console.log(newRefresh)
     if (newRefresh) {
       outsideRefresh = newRefresh;
     }

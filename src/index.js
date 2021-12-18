@@ -15,14 +15,12 @@ ReactDOM.render(
       {({ login, logout, authenticationState, error, accountInfo }) => {
         switch (authenticationState) {
           case AuthenticationState.Authenticated:
-            console.log("auther=nticated");
             return (
               <React.Fragment>
                 <App />
               </React.Fragment>
             );
           case AuthenticationState.Unauthenticated:
-            console.log("NOT auther=nticated");
             return (
               <div>
                 {error && (
@@ -39,7 +37,6 @@ ReactDOM.render(
               </div>
             );
           case AuthenticationState.InProgress:
-            console.log("trying to auther=nticated");
             return <p>Authenticating...</p>;
 
           default:
